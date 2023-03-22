@@ -1,77 +1,48 @@
 import random
 
-pedra = 1
-papel = 2
-tesoura = 3
-spoky = 4
-lagarto = 5
 
-resposta = int(input(
+class Jokenpo:
+    def __init__(self, options=["pedra", "papel", "tesoura", "lagarto", "spock"]):
+        self.options = options
+        self.player_score = 0
+        self.computer_score = 0
+        self.game_on = True
+        self.rules = {
+            "pedra": ["lagarto", "tesoura"],
+            "papel": ["pedra", "spock"],
+            "tesoura": ["papel", "lagarto"],
+            "lagarto": ["papel", "spock"],
+            "spock": ["tesoura", "pedra"]
+        }
 
-    '''
-[1] Pedra
-[2] Papel
-[3] Tesoura
-[4] Spoky
-[5] Lagarto
-Escolha um dos três para jogar:
- '''
-))
+    def play(self):
+        while self.game_on:
+            print("Digite sua jogada! (pedra, papel, tesoura, lagarto ou spock) ou 'sair' para encerrar o jogo:")
+            player_choice = input().lower().strip()
+            while player_choice not in self.options and player_choice != "sair":
+                print(
+                    "Jogada inválida. Tente novamente ou digite 'sair' para encerrar o jogo.")
+                player_choice = input().lower().strip()
+            if player_choice == "sair":
+                self.game_on = False
+            else:
+                computer_choice = random.choice(self.options)
+                print(
+                    f"Você escolheu {player_choice} e o computador {computer_choice}.")
+                if player_choice == computer_choice:
+                    print("Empate!")
+                elif computer_choice in self.rules[player_choice]:
+                    print("Você venceu!")
+                    self.player_score += 1
+                else:
+                    print("Você perdeu!")
+                    self.computer_score += 1
 
-print("=====================================")
+    def show_score(self):
+        print(
+            f"Placar: Jogador {self.player_score} x {self.computer_score} Computador")
 
-ia = random.randint(1, 5)
 
-if ia == pedra:
-    print('O Adversário escolheu pedra')
-    if resposta == pedra:
-        print('Empate')
-    elif resposta == papel or resposta == spoky:
-        print('Você venceu')
-    elif resposta == tesoura or resposta == lagarto:
-        print('Você perdeu')
-    else:
-        print('Resposta inválida')
-
-elif ia == papel:
-    if resposta == papel:
-        print('Empate')
-    elif resposta == tesoura or resposta == lagarto:
-        print('Você venceu')
-    elif resposta == pedra or resposta == spoky:
-        print('Você perdeu')
-    else:
-        print('Resposta inválida')
-
-elif ia == tesoura:
-    print('O Adversário escolheu tesoura')
-    if resposta == tesoura:
-        print('Empate')
-    elif resposta == pedra or resposta == spoky:
-        print('Você venceu')
-    elif resposta == papel or resposta == lagarto:
-        print('Você perdeu')
-    else:
-        print('Resposta inválida')
-
-elif ia == spoky:
-    print('O Adversário escolheu spoky')
-    if resposta == spoky:
-        print('Empate')
-    elif resposta == papel or resposta == lagarto:
-        print('Você venceu')
-    elif resposta == tesoura or resposta == pedra:
-        print('Você perdeu')
-    else:
-        print('Resposta inválida')
-
-elif ia == lagarto:
-    print('O Adversário escolheu tesoura')
-    if resposta == lagarto:
-        print('Empate')
-    elif resposta == pedra or resposta == tesoura:
-        print('Você venceu')
-    elif resposta == spoky or resposta == papel:
-        print('Você perdeu')
-    else:
-        print('Resposta inválida')
+jogo = Jokenpo()
+jogo.play()
+jogo.show_score()
